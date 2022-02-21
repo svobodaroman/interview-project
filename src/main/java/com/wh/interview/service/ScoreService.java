@@ -11,5 +11,5 @@ public interface ScoreService {
 
     MatchScoreDto getLastMatchScore(UUID matchUuid);
 
-    void updateScore(UUID matchUuid, UpdateScoreRequest updateScoreRequest);
+    MatchScoreDto updateScore(UUID matchUuid, UpdateScoreRequest updateScoreRequest);
 }

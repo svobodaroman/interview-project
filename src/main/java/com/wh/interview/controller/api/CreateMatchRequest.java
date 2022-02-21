@@ -7,6 +7,8 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
 
+import static com.wh.interview.GeneralAppConfig.ISO_LOCAL_DATE_TIME;
+
 @Value
 @Builder
 public class CreateMatchRequest {
@@ -14,8 +16,8 @@ public class CreateMatchRequest {
     String matchName;
     int scoreA;
     int scoreB;
-    @JsonFormat(pattern = "YYYY-MM-dd HH:mm")
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    @JsonFormat(pattern = ISO_LOCAL_DATE_TIME)
+    @DateTimeFormat(pattern = ISO_LOCAL_DATE_TIME)
     LocalDateTime scoreTime;
 }
 

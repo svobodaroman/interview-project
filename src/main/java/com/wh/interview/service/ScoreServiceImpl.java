@@ -56,7 +56,7 @@ public class ScoreServiceImpl implements ScoreService {
 
     @Transactional
     @Override
-    public void updateScore(UUID matchUuid, UpdateScoreRequest updateScoreRequest) {
+    public MatchScoreDto updateScore(UUID matchUuid, UpdateScoreRequest updateScoreRequest) {
         MatchScoreEntity lastScore = Optional.ofNullable(matchScoreRepository.findFirstByMatchUuid(String.valueOf(matchUuid), DEFAULT_SORTING))
                 .orElseThrow(() -> {
                     log.error(NO_MATCH_WITH_UUID_FOUND, matchUuid);
@@ -72,7 +72,9 @@ public class ScoreServiceImpl implements ScoreService {
                     .matchUuid(lastScore.matchUuid());
             MatchScoreDto result = matchScoreRepository.save(newMatchScore).asDto();
             notificationDispatcher.dispatchMessage(result.toString());
+            return result;
         }
+        return lastScore.asDto();
     }
 
     private boolean scoreIsBiggerOrMoreRecent(MatchScoreEntity lastScore, UpdateScoreRequest updateScoreRequest) {

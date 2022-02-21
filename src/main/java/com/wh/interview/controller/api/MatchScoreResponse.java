@@ -11,7 +11,7 @@ import static com.wh.interview.GeneralAppConfig.ISO_LOCAL_DATE_TIME;
 
 @Value
 @Builder
-public class GetMatchResponse {
+public class MatchScoreResponse {
 
     String matchName;
     int scoreA;

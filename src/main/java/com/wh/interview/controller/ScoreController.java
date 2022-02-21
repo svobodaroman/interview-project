@@ -2,7 +2,7 @@ package com.wh.interview.controller;
 
 import com.wh.interview.controller.api.CreateMatchRequest;
 import com.wh.interview.controller.api.CreateMatchResponse;
-import com.wh.interview.controller.api.GetMatchResponse;
+import com.wh.interview.controller.api.MatchScoreResponse;
 import com.wh.interview.controller.api.UpdateScoreRequest;
 import com.wh.interview.dto.MatchScoreDto;
 import com.wh.interview.service.ScoreService;
@@ -14,7 +14,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -47,22 +46,27 @@ public class ScoreController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "successful operation")})
     @PutMapping("/v1/{matchUuid}")
-    public ResponseEntity<Void> setScore(@PathVariable UUID matchUuid, @RequestBody UpdateScoreRequest updateScoreRequest) {
+    public MatchScoreResponse setScore(@PathVariable UUID matchUuid, @RequestBody UpdateScoreRequest updateScoreRequest) {
 
-        scoreService.updateScore(matchUuid, updateScoreRequest);
-        return ResponseEntity.ok().build();
+        MatchScoreDto matchScoreDto = scoreService.updateScore(matchUuid, updateScoreRequest);
+        return MatchScoreResponse.builder()
+                .matchName(matchScoreDto.getMatchName())
+                .scoreA(matchScoreDto.getScoreA())
+                .scoreB(matchScoreDto.getScoreB())
+                .scoreTime(matchScoreDto.getScoreTime())
+                .build();
     }
 
     @Operation(summary = "Returns latest known score of match", description = "Returns latest known score of match", tags = {"score"})
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "successful operation",
-                    content = @Content(schema = @Schema(implementation = GetMatchResponse.class)))})
+                    content = @Content(schema = @Schema(implementation = MatchScoreResponse.class)))})
     @GetMapping("/v1/{matchUuid}")
-    public GetMatchResponse getScore(@PathVariable UUID matchUuid) {
+    public MatchScoreResponse getScore(@PathVariable UUID matchUuid) {
 
         MatchScoreDto lastMatchScore = scoreService.getLastMatchScore(matchUuid);
 
-        return GetMatchResponse.builder()
+        return MatchScoreResponse.builder()
                 .matchName(lastMatchScore.getMatchName())
                 .scoreA(lastMatchScore.getScoreA())
                 .scoreB(lastMatchScore.getScoreB())

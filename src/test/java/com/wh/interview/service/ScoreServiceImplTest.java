@@ -61,13 +61,14 @@ public class ScoreServiceImplTest {
         MatchScoreEntity matchMock = MatchScoreEntity.builder().matchUuid(uuid.toString()).matchName(matchName).build();
         when(repositoryMock.findFirstByMatchUuid(any(), any())).thenReturn(matchMock);
         when(repositoryMock.save(any())).thenReturn(matchMock);
-        UpdateScoreRequest request = UpdateScoreRequest.builder().build();
+        LocalDateTime mockTime = LocalDateTime.now();
+        UpdateScoreRequest request = UpdateScoreRequest.builder().scoreA(1).scoreB(2).scoreTime(mockTime).build();
 
 
         MatchScoreDto result = tryCatchWithoutException(() -> scoreService.updateScore(uuid, request));
 
 
-        MatchScoreDto expected = MatchScoreDto.builder().matchUuid(uuid).matchName(matchName).build();
+        MatchScoreDto expected = MatchScoreDto.builder().matchUuid(uuid).matchName(matchName).scoreTime(mockTime).scoreA(1).scoreB(2).build();
         assertEquals(expected, result);
         verify(repositoryMock).findFirstByMatchUuid(String.valueOf(uuid), DEFAULT_SORTING);
         ArgumentCaptor<MatchScoreEntity> matchScoreArgumentCaptor = ArgumentCaptor.forClass(MatchScoreEntity.class);

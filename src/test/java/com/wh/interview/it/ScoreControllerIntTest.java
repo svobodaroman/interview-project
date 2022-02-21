@@ -5,7 +5,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializer;
 import com.wh.interview.controller.ScoreController;
 import com.wh.interview.controller.api.ErrorResponse;
-import com.wh.interview.controller.api.GetMatchResponse;
+import com.wh.interview.controller.api.MatchScoreResponse;
 import com.wh.interview.dto.MatchScoreDto;
 import com.wh.interview.exception.MatchNotFoundException;
 import com.wh.interview.service.ScoreService;
@@ -77,7 +77,7 @@ public class ScoreControllerIntTest {
         // then
         assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
 
-        GetMatchResponse responseObject = gson.fromJson(response.getContentAsString(), GetMatchResponse.class);
+        MatchScoreResponse responseObject = gson.fromJson(response.getContentAsString(), MatchScoreResponse.class);
         assertThat(responseObject.getMatchName()).isEqualTo(matchName);
         assertThat(responseObject.getScoreA()).isEqualTo(1);
         assertThat(responseObject.getScoreB()).isEqualTo(2);
